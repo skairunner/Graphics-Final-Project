@@ -1,0 +1,12 @@
+{
+  "name": "Terrainscape",
+  "version": "0.0.1",
+  "description": "A procedurally generated landscape for exploration.",
+  "main": "projectScript.js",
+  "repository": "https://github.com/ak5352/Graphics-Final-Project.git",
+  "author": "See README",
+  "license": "MIT",
+  "dependencies": {
+    "simplex-noise": "^2.4.0"
+  }
+}
