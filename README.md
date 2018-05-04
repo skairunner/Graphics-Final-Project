@@ -8,3 +8,6 @@ The current, tentative work division is as follows:
 - Skye Im: Terrain generation
 - Junior Maciel: Rendering terrain
 - Michael Yang: Generating decorations
+
+#How to start
+Run the command `yarn install`. All dependencies will be installed.

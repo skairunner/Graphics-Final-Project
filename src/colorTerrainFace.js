@@ -1,4 +1,4 @@
-function colorTerrainFace (face, geometry, v1, v2, v3) {
+export default function colorTerrainFace (face, geometry, v1, v2, v3) {
 
 	const z1 = geometry.vertices[v1].z;
 	const z2 = geometry.vertices[v2].z;

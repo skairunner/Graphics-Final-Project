@@ -1,4 +1,7 @@
-function genTerrain ( rows = 5, cols = 5, noise = () => { return 0; } ) {
+import * as THREE from "three";
+import colorTerrainFace from "./colorTerrainFace";
+
+export default function genTerrain ( rows = 5, cols = 5, noise = () => { return 0; } ) {
     const terrainBuilder = new TerrainBuilder( rows, cols, noise );
     return terrainBuilder.genTerrain();
 }

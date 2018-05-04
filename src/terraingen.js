@@ -1,3 +1,5 @@
+import SimplexNoise from "simplex-noise";
+
 const noise = new SimplexNoise();
 
 // From https://cmaher.github.io/posts/working-with-simplex-noise/
@@ -20,7 +22,7 @@ function octaves(it, x, y, persist, scale, low, high) {
 
 // Accepting an integer width and height
 // Return a (w, h) heightmap.
-function MakeTerrain(w, h, scale) {
+export default function MakeTerrain(w, h, scale) {
 	const o = [];
 	for (let x = 0; x < w; x++) {
 		for (let y = 0; y < h; y++) {
