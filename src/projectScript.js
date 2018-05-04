@@ -94,7 +94,7 @@ function init()
 	
 	// Create a scene with a white background
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0xffffff );
+    scene.background = new THREE.Color( 0x000000 );
 	
 	// Connect camera to first person view
 	controls = new THREE.PointerLockControls(camera);
@@ -161,37 +161,12 @@ function init()
 	raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 20);
 	
 	
-	/* Add a floor to the scene -- for reference 
-	
-	var loaderFloor = new THREE.DDSLoader();
-    var map1 = loaderFloor.load('images/disturb_dxt1_nomip.dds' );
-    map1.minFilter = map1.magFilter = THREE.LinearFilter;
-    map1.anisotropy = 4;
-
-    var cubemap1 = loaderFloor.load('images/Mountains.dds', function ( texture ) {
-        texture.magFilter = THREE.LinearFilter;
-        texture.minFilter = THREE.LinearFilter;
-        texture.mapping = THREE.CubeReflectionMapping;
-        material1.needsUpdate = true;
-    } );
-	
-	
-	var material1 = new THREE.MeshPhongMaterial( { map: map1, envMap: cubemap1 , dithering: true} );
-
-	var floorGeometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
-    floorGeometry.rotateX( - Math.PI / 2);
-
-    var loaderFloorTexture = new THREE.TextureLoader(),
-        floorTexture = loaderFloorTexture.load("images/soil.jpg");
-
-    var floorMaterial = new THREE.MeshLambertMaterial( { map: floorTexture, dithering: true });
-
-    var floor = new THREE.Mesh( floorGeometry, material1 );
-    floor.receiveShadow = true;
-    scene.add( floor );
-	
-	*/
-	
+    // This is where the triangle strip is defined
+    
+    const terrainTriangleStrip = makeTriangleStrip(100, 100);
+    terrainTriangleStrip.rotation.x = 1.7;
+    terrainTriangleStrip.translateY(-100);
+	scene.add(terrainTriangleStrip);
 	
 	// Add a light to the scene
 	
