@@ -1,4 +1,7 @@
 function makeTriangleStrip(rows, cols) {
+	const simplex = new SimplexNoise();
+	const scaling = .025;
+	const scaling2 = 0.5;
 
 	rows++;
 	cols++;
@@ -6,11 +9,13 @@ function makeTriangleStrip(rows, cols) {
 	const geometry = new THREE.Geometry();
 
 	let matrix = [];
-	
+
 	for (let i = 0; i < rows; i++) {
 		for (let j = 0; j < cols; j++) {
+			let z = simplex.noise2D(j * scaling, i * scaling) * 10 + simplex.noise2D(j * scaling2, i * scaling2);
 			geometry.vertices.push (
-				new THREE.Vector3(j, i, (Math.random()/5) + 10 * Math.sin(i / 10))
+				new THREE.Vector3(j, i, z)
+				// new THREE.Vector3(j, i, (Math.random()/5) + 10 * Math.sin(i / 10))
 			);
 		}
 	}
@@ -40,7 +45,7 @@ function makeTriangleStrip(rows, cols) {
 
 	const wireframeMaterial = new THREE.MeshBasicMaterial ({
 		color: 0x444444,
-		wireframe: true
+		wireframe: false
 	});
 
 	const planeMaterial = new THREE.MeshBasicMaterial ({
