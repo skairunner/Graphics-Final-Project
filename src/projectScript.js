@@ -94,7 +94,7 @@ function init()
 
 	// Create a scene with a white background
     scene = new THREE.Scene();
-		scene.fog = new THREE.FogExp2( 0xADD8E6, 0.01 );
+	scene.fog = new THREE.FogExp2( 0xADD8E6, 0.01 );
     scene.background = new THREE.Color( 0xADD8E6 );
 
 	// Connect camera to first person view
@@ -111,7 +111,7 @@ function init()
 
 		if (event.keyCode == 37 || event.keyCode == 65)
 		{
-			moveLeft = true;
+			moveRight = true;
 		}
 
 		if (event.keyCode == 40 || event.keyCode == 83)
@@ -121,7 +121,7 @@ function init()
 
 		if (event.keyCode == 39 || event.keyCode == 68)
 		{
-			moveRight = true;
+			moveLeft = true;
 		}
 
 		if (event.keyCode == 32)
@@ -142,7 +142,7 @@ function init()
 
 		if (event.keyCode == 37 || event.keyCode == 65)
 		{
-			moveLeft = false;
+			moveRight = false;
 		}
 
 		if (event.keyCode == 40 || event.keyCode == 83)
@@ -152,7 +152,7 @@ function init()
 
 		if (event.keyCode == 39 || event.keyCode == 68)
 		{
-			moveRight = false;
+			moveLeft = false;
 		}
     };
 
@@ -163,26 +163,36 @@ function init()
 
 
     // This is where the triangle strip is defined
-		const terrainWidth = 200;
-		const terrainHeight = terrainWidth;
-    const terrainTriangleStrip = makeTriangleStrip(terrainWidth, terrainHeight);
-    terrainTriangleStrip.rotation.x = 1.7;
-    terrainTriangleStrip.translateY(-100);
-		scene.add(terrainTriangleStrip);
+	const terrainWidth = 200;
+	const terrainHeight = terrainWidth;
 
-		const waterGeo = new THREE.PlaneGeometry( terrainWidth, terrainHeight, 2);
-		const waterMaterial = new THREE.MeshBasicMaterial( {
-			color: 0x0000aa,
-			side: THREE.DoubleSide,
-			transparent: true,
-		  opacity: 0.3
-		} );
+	const simplex = new SimplexNoise();
+	const scaling1 = 0.025;
+	const scaling2 = 0.5;
 
-		const waterPlane = new THREE.Mesh( waterGeo, waterMaterial );
-		waterPlane.rotation.x = 1.7;
-		terrainTriangleStrip.translateZ(-15);
+	function noise ( i, j ) {
+		const s1 = simplex.noise2D( j* scaling1, i * scaling1) * 10;
+		const s2 = simplex.noise2D( j * scaling2, i * scaling2 );
+		return s1 + s2;
+	}
 
-		scene.add( waterPlane );
+	const terrain = genTerrain( 200, 200, noise );
+	scene.add( terrain );
+
+	const waterGeo = new THREE.PlaneGeometry( terrainWidth, terrainHeight, 2);
+	const waterMaterial = new THREE.MeshBasicMaterial( {
+		color: 0x0000aa,
+		side: THREE.DoubleSide,
+		transparent: true,
+		opacity: 0.3
+	} );
+
+	const waterPlane = new THREE.Mesh( waterGeo, waterMaterial );
+	waterPlane.rotation.x = Math.PI/2;
+	waterPlane.translateZ(-58);
+	waterPlane.translateY(-50);
+
+	scene.add( waterPlane );
 
 	// Add a light to the scene
 
@@ -217,6 +227,7 @@ function animate()
 {
 	requestAnimationFrame(animate);
 
+	camera.rotation.z = Math.PI;
 	// Set movement speed
     if (controlsEnabled === true)
 	{

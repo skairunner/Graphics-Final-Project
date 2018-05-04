@@ -4,25 +4,31 @@ function colorTerrainFace (face, geometry, v1, v2, v3) {
 	const z2 = geometry.vertices[v2].z;
 	const z3 = geometry.vertices[v3].z;
 
-    const level_1 = -2;
-	const level_2 = -1;
-	const level_3 = 0;
-	const level_4 = 1;
+    const level_1 =  1;
+	const level_2 =  0;
+	const level_3 = -1;
+	const level_4 = -2;
 
-	if (z1 <= level_1 || z1 <= level_1 || z3 <= level_1) {
+	if (isUnder( z1, z2, z3, level_1 )) {
 		grass(face);
 	}
-	else if (z1 <= level_2 || z1 <= level_2 || z3 <= level_2) {
+	else if (isUnder( z1, z2, z3, level_2 )) {
 		grassSand(face);
 	}
-	else if (z1 <= level_3 || z1 <= level_3 || z3 <= level_3) {
+	else if (isUnder( z1, z2, z3, level_3 )) {
 		sand(face);
 	}
-	else if (z1 <= level_4 || z2 <= level_4 || z3 <= level_4) {
+	else if (isUnder( z1, z2, z3, level_4 )) {
 		waterSand(face);
 	}
 	else {
 		water(face);
+	}
+}
+
+function isUnder ( z1, z2, z3, level ) {
+	if (z1 >= level || z1 >= level || z3 >= level) {
+		return true;
 	}
 }
 
