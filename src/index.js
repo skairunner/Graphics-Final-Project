@@ -1,8 +1,8 @@
 import genTerrain from "./genTerrain";
 import SimplexNoise from "simplex-noise";
 import * as THREE from "three";
+import PointerLockControls from "./three-pointerlock";
 import { DDSLoader } from "three-addons"
-import PointerLockControls from "three-pointerlock";
 
 document.addEventListener("DOMContentLoaded", start);
 
