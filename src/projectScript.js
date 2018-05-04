@@ -18,19 +18,19 @@ var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement
 if (havePointerLock)
 {
 	var element = document.body;
-	
-	var pointerlockchange = function ( event ) 
+
+	var pointerlockchange = function ( event )
 	{
 
-        if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) 
+        if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element )
 		{
 
             controlsEnabled = true;
             controls.enabled = true;
             container.style.display = 'none';
-        } 
-		
-		else 
+        }
+
+		else
 		{
             controls.enabled = false;
             container.style.display = 'block';
@@ -38,8 +38,8 @@ if (havePointerLock)
         }
 
     };
-	
-	var pointerlockerror = function (event) 
+
+	var pointerlockerror = function (event)
 	{
         content.style.display = '';
     };
@@ -52,7 +52,7 @@ if (havePointerLock)
 	document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
 	document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
-	content.addEventListener( 'click', function ( event ) 
+	content.addEventListener( 'click', function ( event )
 	{
 		content.style.display = 'none';
 
@@ -61,9 +61,9 @@ if (havePointerLock)
 
 	}, false );
 
-} 
+}
 
-else 
+else
 {
     content.innerHTML = "Your browser does not support the PointerLock API";
 }
@@ -73,7 +73,7 @@ else
 init(); // this is the function where we initialize all shapes, lights, directions, and the camera
 animate(); // this is the function where we animate motion
 
-// controls 
+// controls
 var controlsEnabled = false;
 
 var moveForward = false;
@@ -91,85 +91,111 @@ var direction = new THREE.Vector3();
 function init()
 {
 	camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 4000 ); // create a camera
-	
+
 	// Create a scene with a white background
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0x000000 );
-	
+	scene.fog = new THREE.FogExp2( 0xADD8E6, 0.01 );
+    scene.background = new THREE.Color( 0xADD8E6 );
+
 	// Connect camera to first person view
 	controls = new THREE.PointerLockControls(camera);
     scene.add(controls.getObject());
-	
+
 	 // If the user presses the key, move in the specified direction
-    var onKeyDown = function ( event ) 
+    var onKeyDown = function ( event )
 	{
 		if (event.keyCode == 38 || event.keyCode == 87)
 		{
 			moveForward = true;
 		}
-		
-		if (event.keyCode == 37 || event.keyCode == 65)
-		{
-			moveLeft = true;
-		}
-			
-		if (event.keyCode == 40 || event.keyCode == 83)
-		{
-			moveBackward = true;
-		} 
 
-		if (event.keyCode == 39 || event.keyCode == 68)
+		if (event.keyCode == 37 || event.keyCode == 65)
 		{
 			moveRight = true;
 		}
 
+		if (event.keyCode == 40 || event.keyCode == 83)
+		{
+			moveBackward = true;
+		}
+
+		if (event.keyCode == 39 || event.keyCode == 68)
+		{
+			moveLeft = true;
+		}
+
 		if (event.keyCode == 32)
 		{
-			if ( canJump === true ) 
+			if ( canJump === true )
 				velocity.y += 350;
 			canJump = false;
-		}                
+		}
     };
 
     // If the user lets go of the key, stop moving
-    var onKeyUp = function ( event ) 
+    var onKeyUp = function ( event )
 	{
         if (event.keyCode == 38 || event.keyCode == 87)
 		{
 			moveForward = false;
 		}
-		
-		if (event.keyCode == 37 || event.keyCode == 65)
-		{
-			moveLeft = false;
-		}
-			
-		if (event.keyCode == 40 || event.keyCode == 83)
-		{
-			moveBackward = false;
-		} 
 
-		if (event.keyCode == 39 || event.keyCode == 68)
+		if (event.keyCode == 37 || event.keyCode == 65)
 		{
 			moveRight = false;
 		}
+
+		if (event.keyCode == 40 || event.keyCode == 83)
+		{
+			moveBackward = false;
+		}
+
+		if (event.keyCode == 39 || event.keyCode == 68)
+		{
+			moveLeft = false;
+		}
     };
-	
+
     document.addEventListener( 'keydown', onKeyDown, false );
     document.addEventListener( 'keyup', onKeyUp, false );
-	
+
 	raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 20);
-	
-	
+
+
     // This is where the triangle strip is defined
-    
-    const terrainTriangleStrip = makeTriangleStrip(100, 100);
-    terrainTriangleStrip.rotation.x = 1.7;
-    terrainTriangleStrip.translateY(-100);
-	scene.add(terrainTriangleStrip);
-	
+	const terrainWidth = 200;
+	const terrainHeight = terrainWidth;
+
+	const simplex = new SimplexNoise();
+	const scaling1 = 0.025;
+	const scaling2 = 0.5;
+
+	function noise ( i, j ) {
+		const s1 = simplex.noise2D( j* scaling1, i * scaling1) * 10;
+		const s2 = simplex.noise2D( j * scaling2, i * scaling2 );
+		return s1 + s2;
+	}
+
+	const terrain = genTerrain( 200, 200, noise );
+	scene.add( terrain );
+
+	const waterGeo = new THREE.PlaneGeometry( terrainWidth, terrainHeight, 2);
+	const waterMaterial = new THREE.MeshBasicMaterial( {
+		color: 0x0000aa,
+		side: THREE.DoubleSide,
+		transparent: true,
+		opacity: 0.3
+	} );
+
+	const waterPlane = new THREE.Mesh( waterGeo, waterMaterial );
+	waterPlane.rotation.x = Math.PI/2;
+	waterPlane.translateZ(-58);
+	waterPlane.translateY(-50);
+
+	scene.add( waterPlane );
+
 	// Add a light to the scene
-	
+
 	var light= new THREE.SpotLight( 0xffffff);
     light.position.set(100, 100, 0 );
 
@@ -187,8 +213,8 @@ function init()
     light.shadow.camera.fov = 90;
 
     scene.add(light);
-	
-	// Add a renderer to ensure that the graphics display properly 
+
+	// Add a renderer to ensure that the graphics display properly
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -201,8 +227,9 @@ function animate()
 {
 	requestAnimationFrame(animate);
 
-	// Set movement speed 
-    if (controlsEnabled === true) 
+	camera.rotation.z = Math.PI;
+	// Set movement speed
+    if (controlsEnabled === true)
 	{
         raycaster.ray.origin.copy(controls.getObject().position);
         raycaster.ray.origin.y -= 10;
@@ -223,13 +250,13 @@ function animate()
         direction.x = Number( moveLeft ) - Number( moveRight );
         direction.normalize();
 
-        if ( moveForward || moveBackward ) 
+        if ( moveForward || moveBackward )
 			velocity.z -= direction.z * 500.0 * delta;
-		
-        if ( moveLeft || moveRight ) 
+
+        if ( moveLeft || moveRight )
 			velocity.x -= direction.x * 500.0 * delta;
 
-        if ( onObject === true ) 
+        if ( onObject === true )
 		{
             velocity.y = Math.max( 0, velocity.y );
             canJump = true;
@@ -239,7 +266,7 @@ function animate()
         controls.getObject().translateY( velocity.y * delta );
         controls.getObject().translateZ( velocity.z * delta );
 
-        if ( controls.getObject().position.y < 10 ) 
+        if ( controls.getObject().position.y < 10 )
 		{
             velocity.y = 0;
             controls.getObject().position.y = 10;
