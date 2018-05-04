@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import colorTerrainFace from "./colorTerrainFace";
+import MakeTerrain from "./terraingen.js";
 
 export default function genTerrain ( rows = 5, cols = 5, noise = () => { return 0; } ) {
     const terrainBuilder = new TerrainBuilder( rows, cols, noise );
@@ -8,10 +9,10 @@ export default function genTerrain ( rows = 5, cols = 5, noise = () => { return 
 
 class TerrainBuilder {
 
-    constructor ( rows = 5, cols = 5, noise = () => { return 0; } ) {
+    constructor ( rows = 5, cols = 5 ) {
         this._rows = rows;
         this._cols = cols;
-        this._noise = noise;
+        this._noise = MakeTerrain(rows, cols, 0.01);
     }
 
     genTerrain () {
@@ -53,7 +54,7 @@ class TerrainBuilder {
     _buildVertices () {
         for ( let i = 0; i <= this._rows; i++ ) {
             for ( let j = 0; j <= this._cols; j++ ) {
-                const z = this._noise( i, j );
+                const z = this._noise[i + j * this._rows];
                 const vector3 = new THREE.Vector3( j, i, z );
                 this.geometry.vertices.push( vector3 );
             }

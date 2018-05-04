@@ -141,17 +141,7 @@ function init() {
   const terrainWidth = 200;
   const terrainHeight = terrainWidth;
 
-  const simplex = new SimplexNoise();
-  const scaling1 = 0.025;
-  const scaling2 = 0.5;
-
-  function noise ( i, j ) {
-    const s1 = simplex.noise2D( j* scaling1, i * scaling1) * 10;
-    const s2 = simplex.noise2D( j * scaling2, i * scaling2 );
-    return s1 + s2;
-  }
-
-  const terrain = genTerrain( 200, 200, noise );
+  const terrain = genTerrain(200, 200);
   scene.add( terrain );
 
   const waterGeo = new THREE.PlaneGeometry( terrainWidth, terrainHeight, 2);
