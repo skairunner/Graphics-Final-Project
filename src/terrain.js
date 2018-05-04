@@ -5,12 +5,17 @@ function makeTriangleStrip(rows, cols) {
 
 	const geometry = new THREE.Geometry();
 
+	const heightmap = MakeTerrain(100, 100, .02);
+
 	let matrix = [];
-	
 	for (let i = 0; i < rows; i++) {
 		for (let j = 0; j < cols; j++) {
+			let rlheight = heightmap[100 * j + i];
+			if (rlheight > 3) {
+				rlheight = 3;
+			}
 			geometry.vertices.push (
-				new THREE.Vector3(j, i, (Math.random()/5) + 10 * Math.sin(i / 10))
+				new THREE.Vector3(j, i, rlheight)
 			);
 		}
 	}
