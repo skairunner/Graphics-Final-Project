@@ -163,10 +163,9 @@ function init()
 	
     // This is where the triangle strip is defined
     
-    const terrainTriangleStrip = makeTriangleStrip(50, 50);
+    const terrainTriangleStrip = makeTriangleStrip(100, 100);
     terrainTriangleStrip.rotation.x = 1.7;
     terrainTriangleStrip.translateY(-100);
-    terrainTriangleStrip.translateZ(0);
 	scene.add(terrainTriangleStrip);
 	
 	// Add a light to the scene
