@@ -163,11 +163,26 @@ function init()
 
 
     // This is where the triangle strip is defined
-
-    const terrainTriangleStrip = makeTriangleStrip(200, 200);
+		const terrainWidth = 200;
+		const terrainHeight = terrainWidth;
+    const terrainTriangleStrip = makeTriangleStrip(terrainWidth, terrainHeight);
     terrainTriangleStrip.rotation.x = 1.7;
     terrainTriangleStrip.translateY(-100);
-	scene.add(terrainTriangleStrip);
+		scene.add(terrainTriangleStrip);
+
+		const waterGeo = new THREE.PlaneGeometry( terrainWidth, terrainHeight, 2);
+		const waterMaterial = new THREE.MeshBasicMaterial( {
+			color: 0x0000aa,
+			side: THREE.DoubleSide,
+			transparent: true,
+		  opacity: 0.3
+		} );
+
+		const waterPlane = new THREE.Mesh( waterGeo, waterMaterial );
+		waterPlane.rotation.x = 1.7;
+		terrainTriangleStrip.translateZ(-15);
+
+		scene.add( waterPlane );
 
 	// Add a light to the scene
 

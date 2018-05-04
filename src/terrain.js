@@ -45,7 +45,7 @@ function makeTriangleStrip(rows, cols) {
 
 	const wireframeMaterial = new THREE.MeshBasicMaterial ({
 		color: 0x444444,
-		wireframe: true
+		wireframe: false
 	});
 
 	const planeMaterial = new THREE.MeshBasicMaterial ({
