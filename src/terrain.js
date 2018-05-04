@@ -39,7 +39,6 @@ function makeTriangleStrip(rows, cols) {
 				face_1,
 				face_2
 			);
-
 		}
 	}
 
