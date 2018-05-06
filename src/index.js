@@ -3,6 +3,7 @@ import SimplexNoise from "simplex-noise";
 import * as THREE from "three";
 import PointerLockControls from "./three-pointerlock";
 import { DDSLoader } from "three-addons"
+import MakeTerrain from "./terraingen.js";
 
 document.addEventListener("DOMContentLoaded", start);
 
@@ -141,7 +142,8 @@ function init() {
   const terrainWidth = 200;
   const terrainHeight = terrainWidth;
 
-  const terrain = genTerrain(200, 200);
+  let map = MakeTerrain(terrainWidth, terrainHeight, 0.01);
+  const terrain = genTerrain(terrainWidth, terrainHeight, map.z, map.t, 1);
   scene.add( terrain );
 
   const waterGeo = new THREE.PlaneGeometry( terrainWidth, terrainHeight, 2);

@@ -27,7 +27,8 @@ function octaves(it, x, y, z, persist, scale, low, high) {
 // Accepting an integer width and height
 // Return a (w, h) heightmap.
 export default function MakeTerrain(w, h, scale) {
-  const o = [];
+  const height = [];
+  const types = [];
   for (let x = 0; x < w; x++) {
     for (let y = 0; y < h; y++) {
       let z = octaves(8, x, y, 0.1, 0.5, scale, -5, 10) - 3;
@@ -38,8 +39,9 @@ export default function MakeTerrain(w, h, scale) {
       } else if (z > 2) {
         z = lerp(z, z * octaves(8, x, y, 1, 0.5, scale, 1, 20), isMountainy);
       }
-      o.push(z);
+      height.push(z);
+      types.push(0);
     }
   }
-  return o;
+  return {z: (x, y) => height[x + y * w], t: (x, y) => types[x + y * w]};
 }
