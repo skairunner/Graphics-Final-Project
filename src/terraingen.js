@@ -40,7 +40,7 @@ export default function MakeTerrain(w, h, scale) {
       // } else if (z > 2) {
       //   z = lerp(z, z * octaves(8, x, y, 1, 0.5, scale, 1, 20), isMountainy);
       // }
-      z = PerlinNoise2D(x * scale , y * scale, 8) * 100;
+      let z = PerlinNoise2D(x * scale , y * scale, 8) * 100;
       height.push(z);
       types.push(0);
     }
