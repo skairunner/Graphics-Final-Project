@@ -2,7 +2,7 @@ import genTerrain from "./genTerrain";
 import SimplexNoise from "simplex-noise";
 import * as THREE from "three";
 import PointerLockControls from "./three-pointerlock";
-import { DDSLoader } from "three-addons"
+import { DDSLoader } from "three-addons";
 import MakeTerrain from "./terraingen.js";
 
 document.addEventListener("DOMContentLoaded", start);
