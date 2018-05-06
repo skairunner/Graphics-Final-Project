@@ -146,21 +146,6 @@ function init() {
   const terrain = genTerrain(terrainWidth, terrainHeight, map.z, map.t, 1);
   scene.add( terrain );
 
-  const waterGeo = new THREE.PlaneGeometry( terrainWidth, terrainHeight, 2);
-  const waterMaterial = new THREE.MeshBasicMaterial( {
-    color: 0x0000aa,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.3
-  } );
-
-  const waterPlane = new THREE.Mesh( waterGeo, waterMaterial );
-  waterPlane.rotation.x = Math.PI/2;
-  waterPlane.translateZ(-58);
-  waterPlane.translateY(-50);
-
-  scene.add( waterPlane );
-
   // Add a light to the scene
 
   var light= new THREE.SpotLight( 0xffffff);
