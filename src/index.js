@@ -78,7 +78,7 @@ function init() {
 
   // Create a scene with a black background
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.005 );
+  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.002 );
   scene.background = new THREE.Color( 0xADD8E6 );
 
   // Connect camera to first person view
@@ -142,8 +142,7 @@ function init() {
   const terrainWidth = 200;
   const terrainHeight = terrainWidth;
 
-  let map = MakeTerrain(terrainWidth, terrainHeight, 0.01);
-  const terrain = genTerrain(terrainWidth, terrainHeight, map.z, map.t, 1);
+  const terrain = genTerrain(terrainWidth, terrainHeight, 1 );
   scene.add( terrain );
 
   // Add a light to the scene
@@ -179,6 +178,7 @@ function animate()
 {
   requestAnimationFrame(animate);
 
+  camera.position.set(0, 0, 0);
   camera.rotation.z = Math.PI;
   // Set movement speed
   if (controlsEnabled === true) {
