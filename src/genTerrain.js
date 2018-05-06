@@ -5,6 +5,10 @@ import genTriangleStripGeometry from "./genTriangleStripGeometry";
 
 export default function genTerrain ( rows, cols, scale ) {
 
+    /*
+        Build the geometry, material, and mesh of the terrain.
+    */
+
     const terrainNoise = MakeTerrain( rows, cols, 0.01 );
     const terrainColor = Colors.terrainColor;
 
@@ -15,12 +19,21 @@ export default function genTerrain ( rows, cols, scale ) {
     });
     const terrainMesh = new THREE.Mesh( terrainGeometry, terrainMaterial );
 
+    /*
+        Build the geometry, material, and mesh of the terrain's wireframe.
+    */
+
     const terrainWireframeGeometry = terrainGeometry;
     const terrainWireframeMaterial = new THREE.MeshBasicMaterial ({
         color: 0x444444,
         wireframe: true
     });
     const terrainWireframeMesh = new THREE.Mesh( terrainWireframeGeometry, terrainWireframeMaterial );
+    terrainWireframeMesh.translateZ( 0.017 );
+
+    /*
+        Build the geometry, material, and mesh of the water.
+    */
 
     const waterNoise = function ( i, j ) {
         return Math.random();
@@ -47,4 +60,3 @@ function _reposition ( terrain, rows, cols ) {
     terrain.translateZ( -150 );
     terrain.translateY( -150 );
 }
-
