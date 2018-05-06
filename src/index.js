@@ -2,7 +2,7 @@ import genTerrain from "./genTerrain";
 import SimplexNoise from "simplex-noise";
 import * as THREE from "three";
 import PointerLockControls from "./three-pointerlock";
-import { DDSLoader } from "three-addons"
+import { DDSLoader } from "three-addons";
 import MakeTerrain from "./terraingen.js";
 
 document.addEventListener("DOMContentLoaded", start);
@@ -78,7 +78,7 @@ function init() {
 
   // Create a scene with a black background
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.005 );
+  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.002 );
   scene.background = new THREE.Color( 0xADD8E6 );
 
   // Connect camera to first person view
@@ -142,24 +142,8 @@ function init() {
   const terrainWidth = 200;
   const terrainHeight = terrainWidth;
 
-  let map = MakeTerrain(terrainWidth, terrainHeight, 0.01);
-  const terrain = genTerrain(terrainWidth, terrainHeight, map.z, map.t, 1);
+  const terrain = genTerrain(terrainWidth, terrainHeight, 1 );
   scene.add( terrain );
-
-  const waterGeo = new THREE.PlaneGeometry( terrainWidth, terrainHeight, 2);
-  const waterMaterial = new THREE.MeshBasicMaterial( {
-    color: 0x0000aa,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.3
-  } );
-
-  const waterPlane = new THREE.Mesh( waterGeo, waterMaterial );
-  waterPlane.rotation.x = Math.PI/2;
-  waterPlane.translateZ(-58);
-  waterPlane.translateY(-50);
-
-  scene.add( waterPlane );
 
   // Add a light to the scene
 
@@ -194,6 +178,7 @@ function animate()
 {
   requestAnimationFrame(animate);
 
+  camera.position.set(0, 0, 0);
   camera.rotation.z = Math.PI;
   // Set movement speed
   if (controlsEnabled === true) {
