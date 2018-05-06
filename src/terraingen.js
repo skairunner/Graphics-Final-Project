@@ -1,4 +1,5 @@
 import SimplexNoise from "simplex-noise";
+import PerlinNoise2D from "./exponential-perlin.js";
 
 function lerp(a, b, t) {
   return (1 - t)* a + t * b;
@@ -31,14 +32,15 @@ export default function MakeTerrain(w, h, scale) {
   const types = [];
   for (let x = 0; x < w; x++) {
     for (let y = 0; y < h; y++) {
-      let z = octaves(8, x, y, 0.1, 0.5, scale, -5, 10) - 3;
+      // let z = octaves(8, x, y, 0.1, 0.5, scale, -5, 10) - 3;
 
-      let isMountainy = octaves(4, x, y, 2, 0.5, scale, -1, 1);
-      if (0 < z && z < 2) {
-        z = lerp(z, z * octaves(8, x, y, 1, 0.5, scale, 1, 20), isMountainy * z/2);
-      } else if (z > 2) {
-        z = lerp(z, z * octaves(8, x, y, 1, 0.5, scale, 1, 20), isMountainy);
-      }
+      // let isMountainy = octaves(4, x, y, 2, 0.5, scale, -1, 1);
+      // if (0 < z && z < 2) {
+      //   z = lerp(z, z * octaves(8, x, y, 1, 0.5, scale, 1, 20), isMountainy * z/2);
+      // } else if (z > 2) {
+      //   z = lerp(z, z * octaves(8, x, y, 1, 0.5, scale, 1, 20), isMountainy);
+      // }
+      z = PerlinNoise2D(x * scale , y * scale, 8) * 100;
       height.push(z);
       types.push(0);
     }

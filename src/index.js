@@ -78,7 +78,7 @@ function init() {
 
   // Create a scene with a black background
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.01 );
+  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.005 );
   scene.background = new THREE.Color( 0xADD8E6 );
 
   // Connect camera to first person view
