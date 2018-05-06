@@ -60,4 +60,3 @@ function _reposition ( terrain, rows, cols ) {
     terrain.translateZ( -150 );
     terrain.translateY( -150 );
 }
-
