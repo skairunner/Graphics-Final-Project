@@ -10,7 +10,7 @@ export default function genTriangleStripGeometry ( rows, cols, noise, color, sca
 function _buildVertices ( geometry, noise, scale, rows, cols ) {
     for ( let i = 0; i <= rows; i++ ) {
         for ( let j = 0; j <= cols; j++ ) {
-            const z = noise(i, j);
+            const z = noise[i+j*rows];
             const vector3 = new THREE.Vector3( j*scale, i*scale, z*scale );
             geometry.vertices.push( vector3 );
         }
