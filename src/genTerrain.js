@@ -9,13 +9,15 @@ export default function genTerrain ( rows, cols, scale ) {
         Build the geometry, material, and mesh of the terrain.
     */
 
-    const makeTerrain = MakeTerrain( rows, cols, 0.01 );
+    const makeTerrain = MakeTerrain( rows + 1, cols + 1, 0.01 );
     const terrainColor = Colors.terrainColor;
 
-    const terrainGeometry = genTriangleStripGeometry( rows, cols, makeTerrain.z, terrainColor, scale );
+    // const terrainGeometry = genTriangleStripGeometry( rows, cols, makeTerrain.z, terrainColor, scale );
+    const terrainGeometry = genTriangleStripGeometry( rows, cols, makeTerrain.z, makeTerrain.t, false, scale );
     const terrainMaterial = new THREE.MeshBasicMaterial ({
         side: THREE.DoubleSide,
-        vertexColors: THREE.FaceColors
+        // vertexColors: THREE.FaceColors
+        vertexColors: THREE.VertexColors
     });
     const terrainMesh = new THREE.Mesh( terrainGeometry, terrainMaterial );
 
@@ -40,16 +42,16 @@ export default function genTerrain ( rows, cols, scale ) {
             return Math.random();
         }
     };
-    const waterColor = Colors.waterColor;
+    // const waterColor = Colors.waterColor;
 
-    const waterGeometry = genTriangleStripGeometry( rows, cols, waterNoise.z, waterColor, scale );
-    const waterMaterial = new THREE.MeshBasicMaterial ({
-        side: THREE.DoubleSide,
-        vertexColors: THREE.FaceColors,
-        transparent: true,
-        opacity: 0.5
-    });
-    const waterMesh = new THREE.Mesh( waterGeometry, waterMaterial );
+    // const waterGeometry = genTriangleStripGeometry( rows, cols, waterNoise.z, waterColor, true, scale );
+    // const waterMaterial = new THREE.MeshBasicMaterial ({
+    //     side: THREE.DoubleSide,
+    //     vertexColors: THREE.FaceColors,
+    //     transparent: true,
+    //     opacity: 0.5
+    // });
+    // const waterMesh = new THREE.Mesh( waterGeometry, waterMaterial );
 
     /*
         Group the three together, and reposition them before returning.
@@ -57,8 +59,8 @@ export default function genTerrain ( rows, cols, scale ) {
 
     const terrain = new THREE.Group();
     terrain.add( terrainMesh );
-    terrain.add( terrainWireframeMesh );
-    terrain.add( waterMesh );
+    // terrain.add( terrainWireframeMesh );
+    // terrain.add( waterMesh );
     _reposition( terrain, rows, cols, scale );
     return terrain;
 }

@@ -3327,6 +3327,21 @@ mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0:
   dependencies:
     minimist "0.0.8"
 
+ml-array-max@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ml-array-max/-/ml-array-max-1.0.1.tgz#bd6213b1e0fdccf0eebb9c9a677c2d2405a92181"
+
+ml-array-min@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ml-array-min/-/ml-array-min-1.0.1.tgz#544b71ee0b2f38e6093e6a5964af8a6daff22f28"
+
+ml-array-rescale@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ml-array-rescale/-/ml-array-rescale-1.1.0.tgz#e5a6aaff247865d1e1c8acfb8ef630fe5df1e3a2"
+  dependencies:
+    ml-array-max "^1.0.1"
+    ml-array-min "^1.0.1"
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"

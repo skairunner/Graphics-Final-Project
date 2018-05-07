@@ -11,6 +11,7 @@
     "build": "webpack --mode=production"
   },
   "dependencies": {
+    "ml-array-rescale": "^1.1.0",
     "simplex-noise": "^2.4.0",
     "strict-loader": "^1.2.0",
     "three": "^0.92.0",
