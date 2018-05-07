@@ -11,13 +11,13 @@ export const TerrainTypes = {
 
 export const TerrainColors = {};
 TerrainColors[TerrainTypes.NONE] = [1, 0, 1];
-TerrainColors[TerrainTypes.DEEP_WATER] = [0, 0, 0x99/256];
-TerrainColors[TerrainTypes.SHALLOW_WATER] = [0, 0, 1];
+TerrainColors[TerrainTypes.DEEP_WATER] = [0, 0, 0xAA/256];
+TerrainColors[TerrainTypes.SHALLOW_WATER] = [0, 0.2, 0xCC/256];
 TerrainColors[TerrainTypes.LOW_LAND] = [0, 0x66/256, 0];
 TerrainColors[TerrainTypes.HIGH_LAND] = [0, 0x66/256, 0];
 TerrainColors[TerrainTypes.SAND] = [.8, .8, .3];
 
-function Perturb(rgb) {
+export function Perturb(rgb) {
   return [rgb[0] + Math.random()/10,
           rgb[1] + Math.random()/10,
           rgb[2] + Math.random()/10];

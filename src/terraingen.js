@@ -41,9 +41,9 @@ export default function MakeTerrain(w, h, scale) {
       humidity[x + y * w] = octaves(4, x, y, 0.1, 0.5, 0.05, 0, 10);
     }
   }
-  // rescale(height, {min: -20, max: 20, output: height});
+  // rescale(height, {min: -10, max: 20, output: height});
 
-  const rainfall = new Float32Array(w * h);
+  // const rainfall = new Float32Array(w * h);
   // LET'S DO RAIN SHADOWS
   // Every tick, wind blows towards +x.
   // Pick up water over oceans, drop water when rising in elevation.
@@ -52,15 +52,17 @@ export default function MakeTerrain(w, h, scale) {
   // For now just color by altitude
   for (let i = 0; i < w * h; i++) {
     let z = height[i];
-    if (z < -10) types[i] = TerrainTypes.DEEP_WATER;
-    else if (z < 0) types[i] = TerrainTypes.SHALLOW_WATER;
-    else if (z < 5) types[i] = TerrainTypes.SAND;
-    else types[i] = TerrainTypes.LOW_LAND;
+    if (z < -10) types[i] = TerrainTypes.SAND;//TerrainTypes.DEEP_WATER;
+    else if (z < 0) types[i] = TerrainTypes.SAND;//TerrainTypes.SHALLOW_WATER;
+    else if (z < 2) types[i] = TerrainTypes.SAND;
+    else if (z < 5) types[i] = TerrainTypes.LOW_LAND;
+    else types[i] = TerrainTypes.HIGH_LAND;
 
     // types[i] = Math.floor(humidity[i] / 10 * 3);
   }
 
+  const typefunc = function(x, y) { return this.types[x + y * w]; };
+  typefunc.types = types;
 
-
-  return {z: (x, y) => height[x + y * w], t: (x, y) => types[x + y * w]};
+  return {z: (x, y) => height[x + y * w], t: typefunc};
 }
