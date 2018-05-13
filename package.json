@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "ml-array-rescale": "^1.1.0",
+    "ndarray": "^1.0.18",
+    "ndarray-gaussian-filter": "^1.0.0",
     "simplex-noise": "^2.4.0",
     "strict-loader": "^1.2.0",
     "three": "^0.92.0",

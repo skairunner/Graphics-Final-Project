@@ -6,15 +6,19 @@ export const TerrainTypes = {
   SHALLOW_WATER: 2,
   LOW_LAND: 3,
   HIGH_LAND: 4,
-  SAND: 5
+  SAND: 5,
+  DRY_LAND: 6,
+  MEDIUM_LAND: 7
 };
 
 export const TerrainColors = {};
 TerrainColors[TerrainTypes.NONE] = [1, 0, 1];
 TerrainColors[TerrainTypes.DEEP_WATER] = [0, 0, 0xAA/256];
 TerrainColors[TerrainTypes.SHALLOW_WATER] = [0, 0.2, 0xCC/256];
-TerrainColors[TerrainTypes.LOW_LAND] = [0, 0x66/256, 0];
-TerrainColors[TerrainTypes.HIGH_LAND] = [0, 0x66/256, 0];
+TerrainColors[TerrainTypes.DRY_LAND] = [.6, .75, .2];
+TerrainColors[TerrainTypes.LOW_LAND] = [.6, .7, .2];
+TerrainColors[TerrainTypes.MEDIUM_LAND] = [130/255, 155/255, 32/255];
+TerrainColors[TerrainTypes.HIGH_LAND] = [94/255, 124/255, 51/255];
 TerrainColors[TerrainTypes.SAND] = [.8, .8, .3];
 
 export function Perturb(rgb) {
