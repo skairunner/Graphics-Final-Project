@@ -8,9 +8,9 @@ import createWaterMesh from "./waterMesh";
 
 document.addEventListener("DOMContentLoaded", start);
 
-const terrainWidth = 400;
+const terrainWidth = 100;
 const terrainHeight = terrainWidth;
-const scale = 2;
+const scale = 4;
 
 var camera, scene, renderer, controls;
 var objects = [];
@@ -27,12 +27,16 @@ var velocity, direction;
 var prevTime = performance.now();
 
 // let terrain;
+const waterRatio = 4;
 let waterMesh, waterGeometry;
-const waterWidth = terrainWidth / 4;
+const waterWidth = terrainWidth / waterRatio;
 const waterHeight = waterWidth;
-const waterScale = scale * 4;
+const waterScale = scale * waterRatio;
 let offset = 0.0;
 let frameCount = 0;
+
+const fogColor = 0xADD8E6;
+// const fogColor = 0xed5628;
 
 function start() {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,8 +97,8 @@ function init() {
 
   // Create a scene with a black background
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.001 );
-  scene.background = new THREE.Color( 0xADD8E6 );
+  scene.fog = new THREE.FogExp2( fogColor, 0.001 );
+  scene.background = new THREE.Color( fogColor );
 
   // Connect camera to first person view
   controls = new PointerLockControls(camera);
@@ -174,7 +178,7 @@ function init() {
   // const terrainHeight = terrainWidth;
 
   const terrain = genTerrain( terrainWidth, terrainHeight, scale );
-  [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, offset );
+  [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, waterRatio, offset );
   // terrain = genTerrain(terrainWidth, terrainHeight, 1 );
   scene.add( waterMesh );
   scene.add( terrain );
@@ -182,23 +186,26 @@ function init() {
 
   // Add a light to the scene
 
-  var light= new THREE.SpotLight( 0xffffff);
-  light.position.set(100, 100, 0 );
+  var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+  scene.add( light );
 
-  light.angle = Math.PI;
-  light.penumbra = 0.05;
-  light.decay = 2;
+  // var light= new THREE.SpotLight( 0xffffff);
+  // light.position.set(100, 100, 0 );
 
-  light.castShadow = true;
+  // light.angle = Math.PI;
+  // light.penumbra = 0.05;
+  // light.decay = 2;
 
-  light.shadow.mapSize.width = 1000;
-  light.shadow.mapSize.height = 4000;
+  // light.castShadow = true;
 
-  light.shadow.camera.near = 10;
-  light.shadow.camera.far = 4000;
-  light.shadow.camera.fov = 90;
+  // light.shadow.mapSize.width = 1000;
+  // light.shadow.mapSize.height = 4000;
 
-  scene.add(light);
+  // light.shadow.camera.near = 10;
+  // light.shadow.camera.far = 4000;
+  // light.shadow.camera.fov = 90;
+
+  // scene.add(light);
 
   // Add a renderer to ensure that the graphics display properly
   renderer = new THREE.WebGLRenderer();
@@ -265,15 +272,14 @@ function animate()
 
   }
 
-  if (frameCount % 2 < 0.1) {
+  if (frameCount % 4 < 0.1) {
     scene.remove(waterMesh);
 
-    [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, offset );
+    [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, waterRatio, offset );
     waterGeometry.dispose();
-    console.log(offset);
 
     scene.add(waterMesh);
-    offset += 0.05;
+    offset += 0.1;
   } 
 
   renderer.render(scene, camera);

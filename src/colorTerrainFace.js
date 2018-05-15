@@ -18,9 +18,12 @@ export default {
 	    },
 	
 	    waterColor (face) {
-			const r1 = Math.random() / 10;
-			const r2 = Math.random() / 10;
-			const r3 = Math.random() / 10;
+			// const r1 = Math.random() / 10;
+			// const r2 = Math.random() / 10;
+			// const r3 = Math.random() / 10;
+			const r1 = 0;
+			const r2 = 0;
+			const r3 = 0;
 			face.color.setRGB(0.0 + r1, 0.3 + r2, 0.9 + r3);
 		}
 	};

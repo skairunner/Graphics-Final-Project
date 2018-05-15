@@ -11,7 +11,7 @@ export default function genTerrain ( rows, cols, scale ) {
         Build the geometry, material, and mesh of the terrain.
     */
 
-    const makeTerrain = MakeTerrain( rows + 1, cols + 1, 0.01 );
+    const makeTerrain = MakeTerrain( rows + 1, cols + 1, 0.025 );
     const terrainColor = Colors.terrainColor;
 
     // const terrainGeometry = genTriangleStripGeometry( rows, cols, makeTerrain.z, terrainColor, scale );
@@ -21,19 +21,25 @@ export default function genTerrain ( rows, cols, scale ) {
         vertexColors: THREE.FaceColors
         // vertexColors: THREE.VertexColors
     });
+    // const terrainMaterial = new THREE.MeshLambertMaterial ({
+    //     side: THREE.DoubleSide,
+    //     vertexColors: THREE.FaceColors
+    //     // vertexColors: THREE.VertexColors
+    // });
+
     const terrainMesh = new THREE.Mesh( terrainGeometry, terrainMaterial );
 
     /*
         Build the geometry, material, and mesh of the terrain's wireframe.
     */
 
-    const terrainWireframeGeometry = terrainGeometry;
-    const terrainWireframeMaterial = new THREE.MeshBasicMaterial ({
-        color: 0x444444,
-        wireframe: true
-    });
-    const terrainWireframeMesh = new THREE.Mesh( terrainWireframeGeometry, terrainWireframeMaterial );
-    terrainWireframeMesh.translateZ( 0.017 );
+    // const terrainWireframeGeometry = terrainGeometry;
+    // const terrainWireframeMaterial = new THREE.MeshBasicMaterial ({
+    //     color: 0x444444,
+    //     wireframe: true
+    // });
+    // const terrainWireframeMesh = new THREE.Mesh( terrainWireframeGeometry, terrainWireframeMaterial );
+    // terrainWireframeMesh.translateZ( 0.017 );
 
     /*
         Build the geometry, material, and mesh of the water.

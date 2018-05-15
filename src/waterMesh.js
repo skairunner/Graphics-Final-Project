@@ -9,26 +9,45 @@ import reposition from "./genTerrain";
 const simplex = new SimplexNoise;
 
 const waterNoise = {
-    z: function ( offset ) {
+    z: function ( ratio, offset ) {
         return ( i, j ) => {
         const scaling = 0.1;
-        return simplex.noise3D(i * scaling, j * scaling, offset * scaling) * 0.75;
+        return simplex.noise3D(i * scaling, j * scaling, offset * scaling) / ratio;
         // return Math.random();
         }
     }
 };
 
+const waterEmissiveColor = 0x5dc0cd;
 const waterColor = Colors.waterColor;
 
-const waterMaterial = new THREE.MeshBasicMaterial ({
-    side: THREE.DoubleSide,
+// const waterMaterial = new THREE.MeshBasicMaterial ({
+//     side: THREE.DoubleSide,
+//     vertexColors: THREE.FaceColors,
+//     transparent: true,
+//     opacity: 0.6
+// });
+
+const waterMaterial = new THREE.MeshLambertMaterial ({
+    // side: THREE.DoubleSide,
     vertexColors: THREE.FaceColors,
     transparent: true,
-    opacity: 0.6
+    opacity: 0.75,
+    emissive: waterEmissiveColor
 });
 
-export default function createWaterMesh( rows, cols, scale, offset ) {
-    const waterGeometry = genTriangleStripGeometry( rows, cols, waterNoise.z(offset), waterColor, true, scale );
+// const waterMaterial = new THREE.MeshPhysicalMaterial ({
+//     // side: THREE.DoubleSide,
+//     vertexColors: THREE.FaceColors,
+//     transparent: true,
+//     opacity: 0.75,
+//     emissive: waterEmissiveColor,
+//     clearCoat: 0.5,
+//     reflectivity: 0.75
+// });
+
+export default function createWaterMesh( rows, cols, scale, ratio, offset ) {
+    const waterGeometry = genTriangleStripGeometry( rows, cols, waterNoise.z(ratio, offset), waterColor, true, scale );
     const waterMesh = new THREE.Mesh( waterGeometry, waterMaterial );
 
     waterMesh.position.set( 0, 0, 0 );
