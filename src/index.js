@@ -57,7 +57,7 @@ function start() {
       container.style.display = 'none';
     } else {
       controls.enabled = false;
-      container.style.display = 'block';
+      container.style.display = 'flex';
       content.style.display = '';
     }
   } ;
@@ -216,7 +216,17 @@ function init() {
   renderer.setSize( window.innerWidth, window.innerHeight );
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.domElement.id = 'canvas';
+
+  window.addEventListener('resize', function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+  // renderer.domElement.style.filter = 'blur(10px)';
+
   document.body.appendChild( renderer.domElement );
+
 
   renderer.render(scene, camera);
 }
