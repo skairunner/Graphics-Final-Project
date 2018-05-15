@@ -15,6 +15,8 @@ var moveForward = false;
 var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
+var moveUp = false;
+var moveDown = false;
 var canJump = false;
 var velocity, direction;
 var prevTime = performance.now();
@@ -106,11 +108,19 @@ function init() {
     moveLeft = true;
   }
 
+  if (event.keyCode == 16) { // 'shift'
+    moveDown = true;
+  }
+
+  if (event.keyCode == 32) { // 'space'
+    moveUp = true;
+  }
+
   if (event.keyCode == 32)
   {
-    if ( canJump === true )
-      velocity.y += 350;
-    canJump = false;
+    // if ( canJump === true )
+    //   velocity.y += 350;
+    // canJump = false;
   }
   };
 
@@ -130,6 +140,14 @@ function init() {
 
     if (event.keyCode == 39 || event.keyCode == 68) {
       moveLeft = false;
+    }
+
+    if (event.keyCode == 16) { // 'shift'
+      moveDown = false;
+    }
+
+    if (event.keyCode == 32) { // 'space'
+      moveUp = false;
     }
   };
 
@@ -194,15 +212,18 @@ function animate()
 
     velocity.x -= velocity.x * 10.0 * delta;
     velocity.z -= velocity.z * 10.0 * delta;
+    velocity.y -= velocity.y * 10.0 * delta;
 
-    velocity.y -= 9.8 * 100.0 * delta;
+    // velocity.y -= 9.8 * 100.0 * delta;
 
     direction.z = Number( moveForward ) - Number( moveBackward );
     direction.x = Number( moveLeft ) - Number( moveRight );
+    direction.y = Number( moveUp ) - Number( moveDown );
     direction.normalize();
 
     if ( moveForward || moveBackward ) velocity.z -= direction.z * 500.0 * delta;
     if ( moveLeft || moveRight ) velocity.x -= direction.x * 500.0 * delta;
+    if ( moveUp || moveDown ) velocity.y -= direction.y * 500.0 * delta;
 
     if ( onObject === true ) {
       velocity.y = Math.max( 0, velocity.y );
