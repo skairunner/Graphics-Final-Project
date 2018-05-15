@@ -21,11 +21,6 @@ export default function genTerrain ( rows, cols, scale ) {
         vertexColors: THREE.FaceColors
         // vertexColors: THREE.VertexColors
     });
-    // const terrainMaterial = new THREE.MeshLambertMaterial ({
-    //     side: THREE.DoubleSide,
-    //     vertexColors: THREE.FaceColors
-    //     // vertexColors: THREE.VertexColors
-    // });
 
     const terrainMesh = new THREE.Mesh( terrainGeometry, terrainMaterial );
 

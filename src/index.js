@@ -8,7 +8,7 @@ import createWaterMesh from "./waterMesh";
 
 document.addEventListener("DOMContentLoaded", start);
 
-const terrainWidth = 100;
+const terrainWidth = 200;
 const terrainHeight = terrainWidth;
 const scale = 4;
 
@@ -189,23 +189,26 @@ function init() {
   var light = new THREE.AmbientLight( 0x404040 ); // soft white light
   scene.add( light );
 
-  // var light= new THREE.SpotLight( 0xffffff);
-  // light.position.set(100, 100, 0 );
+  var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+  scene.add( directionalLight );
 
-  // light.angle = Math.PI;
-  // light.penumbra = 0.05;
-  // light.decay = 2;
+  // var light2= new THREE.SpotLight( 0xffffff);
+  // light2.position.set(100, 100, 0 );
 
-  // light.castShadow = true;
+  // light2.angle = Math.PI;
+  // light2.penumbra = 0.05;
+  // light2.decay = 2;
 
-  // light.shadow.mapSize.width = 1000;
-  // light.shadow.mapSize.height = 4000;
+  // light2.castShadow = true;
 
-  // light.shadow.camera.near = 10;
-  // light.shadow.camera.far = 4000;
-  // light.shadow.camera.fov = 90;
+  // light2.shadow.mapSize.width = 1000;
+  // light2.shadow.mapSize.height = 4000;
 
-  // scene.add(light);
+  // light2.shadow.camera.near = 10;
+  // light2.shadow.camera.far = 4000;
+  // light2.shadow.camera.fov = 90;
+
+  // scene.add(light2);
 
   // Add a renderer to ensure that the graphics display properly
   renderer = new THREE.WebGLRenderer();
