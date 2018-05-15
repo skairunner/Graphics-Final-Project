@@ -80,7 +80,7 @@ function init() {
 
   // Create a scene with a black background
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.002 );
+  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.005 );
   scene.background = new THREE.Color( 0xADD8E6 );
 
   // Connect camera to first person view
@@ -157,7 +157,7 @@ function init() {
   raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 20);
 
   // This is where the triangle strip is defined
-  const terrainWidth = 200;
+  const terrainWidth = 400;
   const terrainHeight = terrainWidth;
 
   const terrain = genTerrain(terrainWidth, terrainHeight, 1 );
@@ -225,21 +225,21 @@ function animate()
     if ( moveLeft || moveRight ) velocity.x -= direction.x * 500.0 * delta;
     if ( moveUp || moveDown ) velocity.y -= direction.y * 500.0 * delta;
 
-    if ( onObject === true ) {
-      velocity.y = Math.max( 0, velocity.y );
-      canJump = true;
-    }
+    // if ( onObject === true ) {
+    //   velocity.y = Math.max( 0, velocity.y );
+    //   canJump = true;
+    // }
 
     controls.getObject().translateX( velocity.x * delta );
     controls.getObject().translateY( velocity.y * delta );
     controls.getObject().translateZ( velocity.z * delta );
 
-    if ( controls.getObject().position.y < 10 ) {
-      velocity.y = 0;
-      controls.getObject().position.y = 10;
+    // if ( controls.getObject().position.y < 10 ) {
+    //   velocity.y = 0;
+    //   controls.getObject().position.y = 10;
 
-      canJump = true;
-    }
+    //   canJump = true;
+    // }
 
     prevTime = time;
 

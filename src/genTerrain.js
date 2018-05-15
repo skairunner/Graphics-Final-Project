@@ -2,9 +2,11 @@ import * as THREE from "three";
 import Colors from "./colorTerrainFace";
 import MakeTerrain from "./terraingen.js";
 import genTriangleStripGeometry from "./genTriangleStripGeometry";
+import SimplexNoise from "simplex-noise";
 
 export default function genTerrain ( rows, cols, scale ) {
 
+    const simplex = new SimplexNoise;
     /*
         Build the geometry, material, and mesh of the terrain.
     */
@@ -39,7 +41,9 @@ export default function genTerrain ( rows, cols, scale ) {
 
     const waterNoise = {
         z: function ( i, j ) {
-            return Math.random();
+            const scaling = 0.1;
+            return simplex.noise2D(i * scaling, j * scaling);
+            // return Math.random();
         }
     };
     const waterColor = Colors.waterColor;
@@ -49,7 +53,7 @@ export default function genTerrain ( rows, cols, scale ) {
         side: THREE.DoubleSide,
         vertexColors: THREE.FaceColors,
         transparent: true,
-        opacity: 0.5
+        opacity: 0.75
     });
     const waterMesh = new THREE.Mesh( waterGeometry, waterMaterial );
 

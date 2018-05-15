@@ -21,7 +21,7 @@ export default {
 			const r1 = Math.random() / 10;
 			const r2 = Math.random() / 10;
 			const r3 = Math.random() / 10;
-			face.color.setRGB(0.3 + r1, 0.6 + r2, 0.8 + r3);
+			face.color.setRGB(0.0 + r1, 0.3 + r2, 0.9 + r3);
 		}
 	};
 	
@@ -42,7 +42,7 @@ export default {
 	    const r1 = (Math.random() / 10);
 	    const r2 = (Math.random() / 10);
 	    const r3 = (Math.random() / 10);
-	    face.color.setRGB(0.3 + r1, 0.8 + r2, 0.3 + r3);
+	    face.color.setRGB(0.3 + r1, 0.9 + r2, 0.2 + r3);
 	}
 	
 	function sand (face) {
