@@ -4,8 +4,13 @@ import * as THREE from "three";
 import PointerLockControls from "./three-pointerlock";
 import { DDSLoader } from "three-addons";
 import MakeTerrain from "./terraingen.js";
+import createWaterMesh from "./waterMesh";
 
 document.addEventListener("DOMContentLoaded", start);
+
+const terrainWidth = 400;
+const terrainHeight = terrainWidth;
+const scale = 2;
 
 var camera, scene, renderer, controls;
 var objects = [];
@@ -20,6 +25,14 @@ var moveDown = false;
 var canJump = false;
 var velocity, direction;
 var prevTime = performance.now();
+
+// let terrain;
+let waterMesh, waterGeometry;
+const waterWidth = terrainWidth / 4;
+const waterHeight = waterWidth;
+const waterScale = scale * 4;
+let offset = 0.0;
+let frameCount = 0;
 
 function start() {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +93,7 @@ function init() {
 
   // Create a scene with a black background
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.005 );
+  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.001 );
   scene.background = new THREE.Color( 0xADD8E6 );
 
   // Connect camera to first person view
@@ -157,11 +170,15 @@ function init() {
   raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 20);
 
   // This is where the triangle strip is defined
-  const terrainWidth = 400;
-  const terrainHeight = terrainWidth;
+  // const terrainWidth = 100;
+  // const terrainHeight = terrainWidth;
 
-  const terrain = genTerrain(terrainWidth, terrainHeight, 1 );
+  const terrain = genTerrain( terrainWidth, terrainHeight, scale );
+  [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, offset );
+  // terrain = genTerrain(terrainWidth, terrainHeight, 1 );
+  scene.add( waterMesh );
   scene.add( terrain );
+  
 
   // Add a light to the scene
 
@@ -190,11 +207,14 @@ function init() {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.body.appendChild( renderer.domElement );
+
+  renderer.render(scene, camera);
 }
 
 function animate()
 {
-  requestAnimationFrame(animate);
+  requestAnimationFrame( animate );
+  frameCount++;
 
   camera.position.set(0, 0, 0);
   camera.rotation.z = Math.PI;
@@ -244,6 +264,17 @@ function animate()
     prevTime = time;
 
   }
+
+  if (frameCount % 2 < 0.1) {
+    scene.remove(waterMesh);
+
+    [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, offset );
+    waterGeometry.dispose();
+    console.log(offset);
+
+    scene.add(waterMesh);
+    offset += 0.05;
+  } 
 
   renderer.render(scene, camera);
 }

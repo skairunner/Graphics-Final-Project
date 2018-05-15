@@ -57,7 +57,7 @@ export default function genTerrain ( rows, cols, scale ) {
     // });
     // const waterMesh = new THREE.Mesh( waterGeometry, waterMaterial );
 
-    const waterMesh = createWaterMesh( rows, cols, scale, 0 );
+    // const waterMesh = createWaterMesh( rows, cols, scale, 0 );
     /*
         Group the three together, and reposition them before returning.
     */
@@ -65,12 +65,12 @@ export default function genTerrain ( rows, cols, scale ) {
     const terrain = new THREE.Group();
     terrain.add( terrainMesh );
     // terrain.add( terrainWireframeMesh );
-    terrain.add( waterMesh );
-    _reposition( terrain, rows, cols, scale );
+    // terrain.add( waterMesh );
+    reposition( terrain, rows, cols, scale );
     return terrain;
 }
 
-function _reposition ( terrain, rows, cols, scale ) {
+export function reposition ( terrain, rows, cols, scale ) {
     terrain.position.set( 0, 0, 0 );
     terrain.translateY( 75 );
     terrain.translateZ( scale*-rows/2 );
