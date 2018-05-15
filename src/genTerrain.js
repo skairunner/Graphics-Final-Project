@@ -2,11 +2,11 @@ import * as THREE from "three";
 import Colors from "./colorTerrainFace";
 import MakeTerrain from "./terraingen.js";
 import genTriangleStripGeometry from "./genTriangleStripGeometry";
-import SimplexNoise from "simplex-noise";
+import createWaterMesh from "./waterMesh";
 
 export default function genTerrain ( rows, cols, scale ) {
 
-    const simplex = new SimplexNoise;
+    
     /*
         Build the geometry, material, and mesh of the terrain.
     */
@@ -39,24 +39,25 @@ export default function genTerrain ( rows, cols, scale ) {
         Build the geometry, material, and mesh of the water.
     */
 
-    const waterNoise = {
-        z: function ( i, j ) {
-            const scaling = 0.1;
-            return simplex.noise2D(i * scaling, j * scaling);
-            // return Math.random();
-        }
-    };
-    const waterColor = Colors.waterColor;
+    // const waterNoise = {
+    //     z: function ( i, j ) {
+    //         const scaling = 0.1;
+    //         return simplex.noise2D(i * scaling, j * scaling);
+    //         // return Math.random();
+    //     }
+    // };
+    // const waterColor = Colors.waterColor;
 
-    const waterGeometry = genTriangleStripGeometry( rows, cols, waterNoise.z, waterColor, true, scale );
-    const waterMaterial = new THREE.MeshBasicMaterial ({
-        side: THREE.DoubleSide,
-        vertexColors: THREE.FaceColors,
-        transparent: true,
-        opacity: 0.75
-    });
-    const waterMesh = new THREE.Mesh( waterGeometry, waterMaterial );
+    // const waterGeometry = genTriangleStripGeometry( rows, cols, waterNoise.z, waterColor, true, scale );
+    // const waterMaterial = new THREE.MeshBasicMaterial ({
+    //     side: THREE.DoubleSide,
+    //     vertexColors: THREE.FaceColors,
+    //     transparent: true,
+    //     opacity: 0.75
+    // });
+    // const waterMesh = new THREE.Mesh( waterGeometry, waterMaterial );
 
+    const waterMesh = createWaterMesh( rows, cols, scale, 0 );
     /*
         Group the three together, and reposition them before returning.
     */
