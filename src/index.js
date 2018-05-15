@@ -35,7 +35,7 @@ const waterScale = scale * waterRatio;
 let offset = 0.0;
 let frameCount = 0;
 
-const fogColor = 0xADD8E6;
+const fogColor = 0xcbecff;
 // const fogColor = 0xed5628;
 
 function start() {
@@ -97,7 +97,7 @@ function init() {
 
   // Create a scene with a black background
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2( fogColor, 0.001 );
+  scene.fog = new THREE.FogExp2( fogColor, 0.0007 );
   scene.background = new THREE.Color( fogColor );
 
   // Connect camera to first person view
@@ -249,7 +249,7 @@ function animate()
     direction.z = Number( moveForward ) - Number( moveBackward );
     direction.x = Number( moveLeft ) - Number( moveRight );
     direction.y = Number( moveUp ) - Number( moveDown );
-    direction.normalize();
+    // direction.normalize();
 
     if ( moveForward || moveBackward ) velocity.z -= direction.z * 500.0 * delta;
     if ( moveLeft || moveRight ) velocity.x -= direction.x * 500.0 * delta;
@@ -275,14 +275,14 @@ function animate()
 
   }
 
-  if (frameCount % 4 < 0.1) {
+  if (frameCount % 6 < 0.1) {
     scene.remove(waterMesh);
 
     [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, waterRatio, offset );
     waterGeometry.dispose();
 
     scene.add(waterMesh);
-    offset += 0.1;
+    offset += 0.15;
   } 
 
   renderer.render(scene, camera);
