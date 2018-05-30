@@ -21,7 +21,10 @@ export default {
 			const r1 = Math.random() / 10;
 			const r2 = Math.random() / 10;
 			const r3 = Math.random() / 10;
-			face.color.setRGB(0.3 + r1, 0.6 + r2, 0.8 + r3);
+			// const r1 = 0;
+			// const r2 = 0;
+			// const r3 = 0;
+			face.color.setRGB(0.0 + r1, 0.3 + r2, 0.9 + r3);
 		}
 	};
 	
@@ -42,21 +45,22 @@ export default {
 	    const r1 = (Math.random() / 10);
 	    const r2 = (Math.random() / 10);
 	    const r3 = (Math.random() / 10);
-	    face.color.setRGB(0.3 + r1, 0.8 + r2, 0.3 + r3);
+	    face.color.setRGB(0.2 + r1, 0.8 + r2, 0.1 + r3);
 	}
 	
 	function sand (face) {
-	    const r1 = (Math.random() / 10);
-	    const r2 = (Math.random() / 10);
+	    const r1 = (Math.random() / 20);
+	    const r2 = (Math.random() / 30);
 	    const r3 = (Math.random() / 10);
-	    face.color.setRGB(0.8 + r1, 0.8 + r2, 0.3 + r3);
+	    face.color.setRGB(0.95 + r1, 0.7 + r2, 0.6 + r3);
+
 	}
 	
 	function grassSand (face) {
 	    const r1 = (Math.random() / 10);
 	    const r2 = (Math.random() / 10);
 	    const r3 = (Math.random() / 10);
-	    face.color.setRGB(r1 + 0.6, r2 + 0.8, r3 + 0.2);
+	    face.color.setRGB(r1 + 0.7, r2 + 0.8, r3 + 0.2);
 	}
 	
 	function waterSand (face) {

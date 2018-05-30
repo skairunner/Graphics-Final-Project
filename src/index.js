@@ -4,8 +4,13 @@ import * as THREE from "three";
 import PointerLockControls from "./three-pointerlock";
 import { DDSLoader } from "three-addons";
 import MakeTerrain from "./terraingen.js";
+import createWaterMesh from "./waterMesh";
 
 document.addEventListener("DOMContentLoaded", start);
+
+const terrainWidth = 200;
+const terrainHeight = terrainWidth;
+const scale = 4;
 
 var camera, scene, renderer, controls;
 var objects = [];
@@ -15,9 +20,23 @@ var moveForward = false;
 var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
+var moveUp = false;
+var moveDown = false;
 var canJump = false;
 var velocity, direction;
 var prevTime = performance.now();
+
+// let terrain;
+const waterRatio = 4;
+let waterMesh, waterGeometry;
+const waterWidth = terrainWidth / waterRatio;
+const waterHeight = waterWidth;
+const waterScale = scale * waterRatio;
+let offset = 0.0;
+let frameCount = 0;
+
+const fogColor = 0xcbecff;
+// const fogColor = 0xed5628;
 
 function start() {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,7 +57,7 @@ function start() {
       container.style.display = 'none';
     } else {
       controls.enabled = false;
-      container.style.display = 'block';
+      container.style.display = 'flex';
       content.style.display = '';
     }
   } ;
@@ -78,8 +97,8 @@ function init() {
 
   // Create a scene with a black background
   scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2( 0xADD8E6, 0.002 );
-  scene.background = new THREE.Color( 0xADD8E6 );
+  scene.fog = new THREE.FogExp2( fogColor, 0.0007 );
+  scene.background = new THREE.Color( fogColor );
 
   // Connect camera to first person view
   controls = new PointerLockControls(camera);
@@ -106,11 +125,19 @@ function init() {
     moveLeft = true;
   }
 
+  if (event.keyCode == 16) { // 'shift'
+    moveDown = true;
+  }
+
+  if (event.keyCode == 32) { // 'space'
+    moveUp = true;
+  }
+
   if (event.keyCode == 32)
   {
-    if ( canJump === true )
-      velocity.y += 350;
-    canJump = false;
+    // if ( canJump === true )
+    //   velocity.y += 350;
+    // canJump = false;
   }
   };
 
@@ -131,6 +158,14 @@ function init() {
     if (event.keyCode == 39 || event.keyCode == 68) {
       moveLeft = false;
     }
+
+    if (event.keyCode == 16) { // 'shift'
+      moveDown = false;
+    }
+
+    if (event.keyCode == 32) { // 'space'
+      moveUp = false;
+    }
   };
 
   document.addEventListener( 'keydown', onKeyDown, false );
@@ -139,31 +174,41 @@ function init() {
   raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 20);
 
   // This is where the triangle strip is defined
-  const terrainWidth = 200;
-  const terrainHeight = terrainWidth;
+  // const terrainWidth = 100;
+  // const terrainHeight = terrainWidth;
 
-  const terrain = genTerrain(terrainWidth, terrainHeight, 1 );
+  const terrain = genTerrain( terrainWidth, terrainHeight, scale );
+  [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, waterRatio, offset );
+  // terrain = genTerrain(terrainWidth, terrainHeight, 1 );
+  scene.add( waterMesh );
   scene.add( terrain );
+  
 
   // Add a light to the scene
 
-  var light= new THREE.SpotLight( 0xffffff);
-  light.position.set(100, 100, 0 );
+  var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+  scene.add( light );
 
-  light.angle = Math.PI;
-  light.penumbra = 0.05;
-  light.decay = 2;
+  var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+  scene.add( directionalLight );
 
-  light.castShadow = true;
+  // var light2= new THREE.SpotLight( 0xffffff);
+  // light2.position.set(100, 100, 0 );
 
-  light.shadow.mapSize.width = 1000;
-  light.shadow.mapSize.height = 4000;
+  // light2.angle = Math.PI;
+  // light2.penumbra = 0.05;
+  // light2.decay = 2;
 
-  light.shadow.camera.near = 10;
-  light.shadow.camera.far = 4000;
-  light.shadow.camera.fov = 90;
+  // light2.castShadow = true;
 
-  scene.add(light);
+  // light2.shadow.mapSize.width = 1000;
+  // light2.shadow.mapSize.height = 4000;
+
+  // light2.shadow.camera.near = 10;
+  // light2.shadow.camera.far = 4000;
+  // light2.shadow.camera.fov = 90;
+
+  // scene.add(light2);
 
   // Add a renderer to ensure that the graphics display properly
   renderer = new THREE.WebGLRenderer();
@@ -171,12 +216,25 @@ function init() {
   renderer.setSize( window.innerWidth, window.innerHeight );
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.domElement.id = 'canvas';
+
+  window.addEventListener('resize', function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+  // renderer.domElement.style.filter = 'blur(10px)';
+
   document.body.appendChild( renderer.domElement );
+
+
+  renderer.render(scene, camera);
 }
 
 function animate()
 {
-  requestAnimationFrame(animate);
+  requestAnimationFrame( animate );
+  frameCount++;
 
   camera.position.set(0, 0, 0);
   camera.rotation.z = Math.PI;
@@ -194,35 +252,48 @@ function animate()
 
     velocity.x -= velocity.x * 10.0 * delta;
     velocity.z -= velocity.z * 10.0 * delta;
+    velocity.y -= velocity.y * 10.0 * delta;
 
-    velocity.y -= 9.8 * 100.0 * delta;
+    // velocity.y -= 9.8 * 100.0 * delta;
 
     direction.z = Number( moveForward ) - Number( moveBackward );
     direction.x = Number( moveLeft ) - Number( moveRight );
-    direction.normalize();
+    direction.y = Number( moveUp ) - Number( moveDown );
+    // direction.normalize();
 
     if ( moveForward || moveBackward ) velocity.z -= direction.z * 500.0 * delta;
     if ( moveLeft || moveRight ) velocity.x -= direction.x * 500.0 * delta;
+    if ( moveUp || moveDown ) velocity.y -= direction.y * 500.0 * delta;
 
-    if ( onObject === true ) {
-      velocity.y = Math.max( 0, velocity.y );
-      canJump = true;
-    }
+    // if ( onObject === true ) {
+    //   velocity.y = Math.max( 0, velocity.y );
+    //   canJump = true;
+    // }
 
     controls.getObject().translateX( velocity.x * delta );
     controls.getObject().translateY( velocity.y * delta );
     controls.getObject().translateZ( velocity.z * delta );
 
-    if ( controls.getObject().position.y < 10 ) {
-      velocity.y = 0;
-      controls.getObject().position.y = 10;
+    // if ( controls.getObject().position.y < 10 ) {
+    //   velocity.y = 0;
+    //   controls.getObject().position.y = 10;
 
-      canJump = true;
-    }
+    //   canJump = true;
+    // }
 
     prevTime = time;
 
   }
+
+  if (frameCount % 6 < 0.1) {
+    scene.remove(waterMesh);
+
+    [waterMesh, waterGeometry] = createWaterMesh( waterHeight, waterWidth, waterScale, waterRatio, offset );
+    waterGeometry.dispose();
+
+    scene.add(waterMesh);
+    offset += 0.15;
+  } 
 
   renderer.render(scene, camera);
 }
